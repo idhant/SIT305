@@ -1,0 +1,7 @@
+#Sat May 23 16:42:56 AEST 2020
+base.0=D\:\\Idhant\\Idhant\\Deakin\\2020\\2020 T1\\SIT305\\Project\\Project code\\SIT305\\Source\\NavigationDrawerTest\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\out\\classes.dex
+path.1=classes.dex
+renamed.1=classes2.dex
+path.0=classes.dex
+renamed.0=classes.dex
+base.1=D\:\\Idhant\\Idhant\\Deakin\\2020\\2020 T1\\SIT305\\Project\\Project code\\SIT305\\Source\\NavigationDrawerTest\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\out\\classes.dex
