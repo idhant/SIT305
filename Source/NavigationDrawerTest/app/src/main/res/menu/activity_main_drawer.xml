@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_sample"
+            android:title="Credits" />
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@drawable/ic_menu_sample"
+            android:title="History" />
+        <item
+            android:id="@+id/nav_tables"
+            android:icon="@drawable/ic_menu_sample"
+            android:title="Tables" />
+        <item
+            android:id="@+id/nav_leaderboard"
+            android:icon="@drawable/ic_menu_sample"
+            android:title="Leaderboard" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_menu_sample"
+            android:title="Settings" />
+
+    </group>
+
+    <item android:title="Contact Us">
+        <menu>
+            <item
+                android:title="Email Us"
+                android:icon="@drawable/ic_menu_email"
+                android:id="@+id/nav_email"/>
+            <item
+                android:title="Call Us"
+                android:icon="@drawable/ic_menu_phone"
+                android:id="@+id/nav_phone"/>
+            <item
+                android:title="Find us on maps"
+                android:icon="@drawable/ic_menu_sample"
+                android:id="@+id/nav_map"/>
+
+        </menu>
+    </item>
+
+</menu>
