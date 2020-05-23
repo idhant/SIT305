@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">AcademyManagement</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Customer Name</string>
+    <string name="nav_header_subtitle">Customer Username</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_credits">Credits</string>
+    <string name="menu_history">History</string>
+    <string name="menu_leaderboard">Leaderboard</string>
+    <string name="menu_tables">Tables</string>
+    <string name="menu_reward">Redeem rewards</string>
+    <string name="menu_settings">Settings</string>
+
+    <string name="menu_contact">Contact Information</string>
+    <string name="menu_email">Email Us</string>
+    <string name="menu_phone">Phone Us</string>
+    <string name="menu_map">Find us on maps</string>
+
+    <string name="home_second">Home Second</string>
+</resources>
