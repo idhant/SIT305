@@ -6,6 +6,7 @@
     <string name="nav_header_subtitle">Customer Username</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
@@ -24,17 +25,18 @@
 
     <string name="home_second">Home Second</string>
 
+    <string name="title_activity_login">Login Activity</string>
     <string name="login_button_login">Log In</string>
     <string name="login_email">Please write your email</string>
     <string name="login_password">Please write your password</string>
     <string name="login_button_register">Don`t have a account?, Register</string>
+
     <string name="register_button_login">Already have a account?,Log In</string>
     <string name="register_email">Please write your email</string>
     <string name="register_password">Please write your password</string>
     <string name="register_confirm_password">Confirm Password</string>
     <string name="register_button_register">Register</string>
-
-    <string name="title_activity_login">Login Activity</string>
+    <string name="register_username">Please write a custom username</string>
     <string name="title_activity_register">Register Activity</string>
 
 </resources>

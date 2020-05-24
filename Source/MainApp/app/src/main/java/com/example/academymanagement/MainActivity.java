@@ -1,5 +1,6 @@
 package com.example.academymanagement;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
@@ -7,6 +8,7 @@ import android.view.Menu;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -32,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     // Declaring a appbarconfig variable to add the options in the appbar
     private AppBarConfiguration mAppBarConfiguration;
 
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener authStateListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +52,15 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intToMain = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intToMain);
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
+
+
 
         // Create a reference to the drawer layout in activity_main.xml
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
