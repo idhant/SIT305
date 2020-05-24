@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "436691250105",
+    "firebase_url": "https://academymanagement-f99c9.firebaseio.com",
+    "project_id": "academymanagement-f99c9",
+    "storage_bucket": "academymanagement-f99c9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436691250105:android:4400e12cf2646937f82468",
+        "android_client_info": {
+          "package_name": "com.example.academymanagement"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "436691250105-iicn53d9imcgo164g1kgs3b9tf4b9t46.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.academymanagement",
+            "certificate_hash": "0000000000000000000000000000000000000000"
+          }
+        },
+        {
+          "client_id": "436691250105-pimbmq9cv5nis2vr3k5aq39kodg670d2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbiYwjtSLTYlVR2h8MldfzQe9414gp3lE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "436691250105-pimbmq9cv5nis2vr3k5aq39kodg670d2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
