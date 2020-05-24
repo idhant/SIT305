@@ -24,13 +24,17 @@
 
     <string name="home_second">Home Second</string>
 
-    <string name="title_activity_login">Sign in</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="login_button_login">Log In</string>
+    <string name="login_email">Please write your email</string>
+    <string name="login_password">Please write your password</string>
+    <string name="login_button_register">Don`t have a account?, Register</string>
+    <string name="register_button_login">Already have a account?,Log In</string>
+    <string name="register_email">Please write your email</string>
+    <string name="register_password">Please write your password</string>
+    <string name="register_confirm_password">Confirm Password</string>
+    <string name="register_button_register">Register</string>
+
+    <string name="title_activity_login">Login Activity</string>
+    <string name="title_activity_register">Register Activity</string>
+
 </resources>
