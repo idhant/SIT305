@@ -2,10 +2,12 @@ package com.example.academymanagement;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -13,6 +15,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -34,7 +37,7 @@ import org.w3c.dom.Text;
 * activity_main.xml = defines the space for the app_bar_main and the navigation_View
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     // Declaring a appbarconfig variable to add the options in the appbar
     private AppBarConfiguration mAppBarConfiguration;
@@ -51,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setNavigationViewListener();
 
         // Create a reference to the toolbar in app_bar_main.xml which acts as a action bar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -104,7 +108,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Create a reference to the navView in activity_main.xml
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+        // Create a reference to the header of nav bar
         View headerView = navigationView.getHeaderView(0);
+        // Append username and email of current user.
         TextView navName = (TextView) headerView.findViewById(R.id.menu_name);
         TextView navUsername = (TextView) headerView.findViewById(R.id.menu_username);
         navName.setText(logName);
@@ -125,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Reference to the host fragment in the content_main.xml which goes in app_bar_main.xml
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
         // Sets the actionbar with the fragment
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -142,5 +150,35 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private void setNavigationViewListener() {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        switch (item.getItemId()) {
+
+            case R.id.nav_phone:
+                Toast.makeText(MainActivity.this,"Clicked Phone action",Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.nav_email:
+                Toast.makeText(MainActivity.this,"Clicked Email action",Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.nav_map:
+                Toast.makeText(MainActivity.this,"Clicked Map action",Toast.LENGTH_SHORT).show();
+                break;
+
+        }
+        //close navigation drawer
+        //mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+
+        //return false;
     }
 }

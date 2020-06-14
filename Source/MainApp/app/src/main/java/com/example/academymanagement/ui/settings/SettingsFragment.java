@@ -1,5 +1,7 @@
 package com.example.academymanagement.ui.settings;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,9 @@ public class SettingsFragment extends Fragment{
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
         final TextView textView = root.findViewById(R.id.text_settings);
         textView.setText("Settings");
+        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+        callIntent.setData(Uri.parse("tel:470287377"));
+        startActivity(callIntent);
         return root;
     }
 }
