@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -17,6 +20,8 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import org.w3c.dom.Text;
 
 /*
 *Breakdown of different views:
@@ -36,6 +41,11 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
+
+    private Button logoutButton;
+
+    private String logName;
+    private String logEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +70,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /*
+        logoutButton = findViewById(R.id.action_logout);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intToMain = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intToMain);
+            }
+        });
+        */
 
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Name, email address, and profile photo Url
+            logName = user.getDisplayName();
+            logEmail = user.getEmail();
+            //Uri photoUrl = user.getPhotoUrl();
+
+            // Check if user's email is verified
+            boolean emailVerified = user.isEmailVerified();
+
+            // The user's ID, unique to the Firebase project. Do NOT use this value to
+            // authenticate with your backend server, if you have one. Use
+            // FirebaseUser.getIdToken() instead.
+            String uid = user.getUid();
+        }
 
         // Create a reference to the drawer layout in activity_main.xml
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
         // Create a reference to the navView in activity_main.xml
         NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView navName = (TextView) headerView.findViewById(R.id.menu_name);
+        TextView navUsername = (TextView) headerView.findViewById(R.id.menu_username);
+        navName.setText(logName);
+        navUsername.setText(logEmail);
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.

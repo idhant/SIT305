@@ -24,6 +24,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText register_email, register_password, register_confirm_password, register_username;
@@ -52,10 +54,12 @@ public class RegisterActivity extends AppCompatActivity {
         register_button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 final String email = register_email.getText().toString();
                 String pwd = register_password.getText().toString();
                 String confirm_pwd = register_confirm_password.getText().toString();
                 final String username = register_username.getText().toString();
+
                 if(email.isEmpty()){
                     register_email.setError("Please enter email id");
                     register_email.requestFocus();
@@ -91,11 +95,11 @@ public class RegisterActivity extends AppCompatActivity {
                                 user.put("name", username);
                                 // Add a new document with a generated ID
                                 db.collection("users")
-                                        .add(user)
-                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        .document(username).set(user)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                Toast.makeText(RegisterActivity.this, "DocumentSnapshot added with ID: " + documentReference.getId(),Toast.LENGTH_SHORT).show();
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(RegisterActivity.this, "DocumentSnapshot added with ID: " + username,Toast.LENGTH_SHORT).show();
                                                 //Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                                             }
                                         })
@@ -106,6 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                 //Log.w(TAG, "Error adding document", e);
                                             }
                                         });
+
                                 startActivity(new Intent(RegisterActivity.this,MainActivity.class));
                             }
                         }
