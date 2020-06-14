@@ -126,7 +126,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.id.nav_tables,
                 R.id.nav_leaderboard,
                 R.id.nav_reward,
-                R.id.nav_settings)
+                R.id.nav_settings,
+                R.id.nav_contact_information)
                 .setDrawerLayout(drawer)
                 .build();
 

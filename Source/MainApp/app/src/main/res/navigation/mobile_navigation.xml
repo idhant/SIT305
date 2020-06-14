@@ -59,5 +59,10 @@
         android:name="com.example.academymanagement.ui.settings.SettingsFragment"
         android:label="@string/menu_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/nav_contact_information"
+        android:name="com.example.academymanagement.ui.contact_information.ContactInformationFragment"
+        android:label="@string/menu_contact"
+        tools:layout="@layout/fragment_contact_information"/>
 
 </navigation>

@@ -59,9 +59,13 @@ public class TablesFragment extends Fragment {
         textFour = root.findViewById(R.id.fragment_tables_text_four);
 
         tableOne.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
+        tableOne.setBackground(null);
         tableTwo.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
+        tableTwo.setBackground(null);
         tableThree.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
+        tableThree.setBackground(null);
         tableFour.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
+        tableFour.setBackground(null);
 
         //TODO: Implement async function instead of handler
         new Handler().postDelayed(new Runnable() {
@@ -84,10 +88,12 @@ public class TablesFragment extends Fragment {
             case 1:
                 if (tableOneObject.getTablestatus()){
                     tableOne.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_enabled));
+                    tableOne.setBackground(null);
                     status = "Occupied";
                 }
                 else{
                     tableOne.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
+                    tableOne.setBackground(null);
                     status = "Vacant";
                 }
                 textOne.append("Table One"+ "\n" + "Table Price: "+ tableOneObject.getTableprice() + "\n" + "Table Status: " + status);
@@ -96,10 +102,12 @@ public class TablesFragment extends Fragment {
             case 2:
                 if (tableTwoObject.getTablestatus()){
                     tableTwo.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_enabled));
+                    tableTwo.setBackground(null);
                     status = "Occupied";
                 }
                 else{
                     tableTwo.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
+                    tableTwo.setBackground(null);
                     status = "Vacant";
                 }
                 textTwo.append("Table Two"+ "\n" + "Table Price: " + tableTwoObject.getTableprice() + "\n" + "Table Status: " + status);
@@ -108,10 +116,12 @@ public class TablesFragment extends Fragment {
             case 3:
                 if (tableThreeObject.getTablestatus()){
                     tableThree.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_enabled));
+                    tableThree.setBackground(null);
                     status = "Occupied";
                 }
                 else{
                     tableThree.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
+                    tableThree.setBackground(null);
                     status = "Vacant";
                 }
                 textThree.append("Table Three" + "\n" + "Table Price:" + tableThreeObject.getTableprice() + "\n" + "Table Status: " + status);
@@ -120,10 +130,12 @@ public class TablesFragment extends Fragment {
             case 4:
                 if (tableFourObject.getTablestatus()){
                     tableFour.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_enabled));
+                    tableFour.setBackground(null);
                     status = "Occupied";
                 }
                 else{
                     tableFour.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
+                    tableFour.setBackground(null);
                     status = "Vacant";
                 }
                 textFour.append("Table Four" + "\n" + "Table Price:" + tableFourObject.getTableprice() + "\n" + "Table Status: " + status);
