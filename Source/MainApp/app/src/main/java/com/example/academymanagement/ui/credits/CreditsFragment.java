@@ -168,9 +168,9 @@ public class CreditsFragment extends Fragment {
                 if (documentSnapshot != null && documentSnapshot.exists()) {
                     customer = documentSnapshot.toObject(Customer.class);
                     if(customer != null){
-                        Log.d(TAG, "Customer db details:" + customer.getEmail());
-                        Log.d(TAG, "Customer db details:" + customer.getCredits());
-                        Log.d(TAG, "Customer db details:" + customer.getUsername());
+                        Log.d(TAG, "Customer db email:" + customer.getEmail());
+                        Log.d(TAG, "Customer db credits:" + customer.getCredits());
+                        Log.d(TAG, "Customer db username:" + customer.getUsername());
                         //TODO: Set this string using strings.xml
                         currentAmountText.setText("Current available Credits: " + customer.getCredits());
                         currentCredits = customer.getCredits();

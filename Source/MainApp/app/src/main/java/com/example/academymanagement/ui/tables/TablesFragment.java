@@ -1,93 +1,205 @@
 package com.example.academymanagement.ui.tables;
 
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.example.academymanagement.R;
 import com.example.academymanagement.models.Tables;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import static android.content.ContentValues.TAG;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class TablesFragment extends Fragment {
 
     // Access a Cloud Firestore instance from your Activity
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    // variables to store the Tables Class objects
     private Tables tableOneObject, tableTwoObject, tableThreeObject, tableFourObject;
 
+    // variables to store the image button references
     private ImageButton tableOne, tableTwo, tableThree, tableFour;
 
+    // variables to store the textview references
     private TextView textOne, textTwo, textThree, textFour;
 
-    private ProgressBar progressBar;
+    // variables to store document references
+    private DocumentReference docRefTableOne, docRefTableTwo, docRefTableThree, docRefTableFour;
+
+    // variable to check vacant or occupied status of tables
+    private String updateStatus;
+
+    // TAG variable for debugging
+    private static final String TAG = "TablesFragment:";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_tables, container, false);
 
-        progressBar = root.findViewById(R.id.fragment_tables_progressbar);
-        progressBar.setVisibility(root.VISIBLE);
-        CheckServerResponse();
-
-
+        // Storing references to the private variables
         tableOne = root.findViewById(R.id.fragment_tables_one);
         tableTwo = root.findViewById(R.id.fragment_tables_two);
         tableThree = root.findViewById(R.id.fragment_tables_three);
         tableFour = root.findViewById(R.id.fragment_tables_four);
-
         textOne = root.findViewById(R.id.fragment_tables_text_one);
         textTwo = root.findViewById(R.id.fragment_tables_text_two);
         textThree = root.findViewById(R.id.fragment_tables_text_three);
         textFour = root.findViewById(R.id.fragment_tables_text_four);
 
-        tableOne.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
-        tableOne.setBackground(null);
-        tableTwo.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
-        tableTwo.setBackground(null);
-        tableThree.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
-        tableThree.setBackground(null);
-        tableFour.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
-        tableFour.setBackground(null);
+        // Storing the path of collection(tables)/document(table name)
+        docRefTableOne = db.collection("tables").document("tableOne");
+        docRefTableTwo = db.collection("tables").document("tableTwo");
+        docRefTableThree = db.collection("tables").document("tableThree");
+        docRefTableFour = db.collection("tables").document("tableFour");
 
-        //TODO: Implement async function instead of handler
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                RespondServerResponse(1);
-                RespondServerResponse(2);
-                RespondServerResponse(3);
-                RespondServerResponse(4);
-            }
-        }, 3000);
+        //CheckDataBaseOnce();
+        // Checks the database for table related values. If there is any change updates it as well.
+        CheckDatabaseRealtime();
 
-        progressBar.setVisibility(root.INVISIBLE);
         return root;
     }
 
+    // Checks the changes to the document real time and updates the tables fields.
+    private void CheckDatabaseRealtime() {
+        docRefTableOne.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    tableOneObject = documentSnapshot.toObject(Tables.class);
+                    if (tableOneObject != null) {
+                        Log.d(TAG, "Tables db name:" + tableOneObject.getTablename());
+                        Log.d(TAG, "Tables db price:" + tableOneObject.getTableprice());
+                        Log.d(TAG, "Tables db status:" + tableOneObject.getTablestatus());
+                        if (tableOneObject.getTablestatus()) {
+                            tableOne.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_enabled));
+                            tableOne.setBackground(null);
+                            updateStatus = "Occupied";
+                        } else {
+                            tableOne.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
+                            tableOne.setBackground(null);
+                            updateStatus = "Vacant";
+                        }
+                        textOne.append("Table One" + "\n" + "Table Price: " + tableOneObject.getTableprice() + "\n" + "Table Status: " + updateStatus);
+                    }
+                } else {
+                    Log.d(TAG, "Table db details: null");
+                }
+            }
+        });
+
+        docRefTableTwo.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    tableTwoObject = documentSnapshot.toObject(Tables.class);
+                    if (tableTwoObject != null) {
+                        Log.d(TAG, "Tables db name:" + tableTwoObject.getTablename());
+                        Log.d(TAG, "Tables db price:" + tableTwoObject.getTableprice());
+                        Log.d(TAG, "Tables db status:" + tableTwoObject.getTablestatus());
+                        if (tableTwoObject.getTablestatus()) {
+                            tableTwo.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_enabled));
+                            tableTwo.setBackground(null);
+                            updateStatus = "Occupied";
+                        } else {
+                            tableTwo.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
+                            tableTwo.setBackground(null);
+                            updateStatus = "Vacant";
+                        }
+                        textTwo.append("Table Two" + "\n" + "Table Price: " + tableTwoObject.getTableprice() + "\n" + "Table Status: " + updateStatus);
+                    }
+                } else {
+                    Log.d(TAG, "Table db details: null");
+                }
+            }
+        });
+
+        docRefTableThree.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    tableThreeObject = documentSnapshot.toObject(Tables.class);
+                    if (tableThreeObject != null) {
+                        Log.d(TAG, "Tables db name:" + tableThreeObject.getTablename());
+                        Log.d(TAG, "Tables db price:" + tableThreeObject.getTableprice());
+                        Log.d(TAG, "Tables db status:" + tableThreeObject.getTablestatus());
+                        if (tableThreeObject.getTablestatus()) {
+                            tableThree.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_enabled));
+                            tableThree.setBackground(null);
+                            updateStatus = "Occupied";
+                        } else {
+                            tableThree.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
+                            tableThree.setBackground(null);
+                            updateStatus = "Vacant";
+                        }
+                        textThree.append("Table Three" + "\n" + "Table Price: " + tableThreeObject.getTableprice() + "\n" + "Table Status: " + updateStatus);
+                    }
+                } else {
+                    Log.d(TAG, "Table db details: null");
+                }
+            }
+        });
+
+        docRefTableFour.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    tableFourObject = documentSnapshot.toObject(Tables.class);
+                    if (tableFourObject != null) {
+                        Log.d(TAG, "Tables db name:" + tableFourObject.getTablename());
+                        Log.d(TAG, "Tables db price:" + tableFourObject.getTableprice());
+                        Log.d(TAG, "Tables db status:" + tableFourObject.getTablestatus());
+                        if (tableFourObject.getTablestatus()) {
+                            tableFour.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_enabled));
+                            tableFour.setBackground(null);
+                            updateStatus = "Occupied";
+                        } else {
+                            tableFour.setImageDrawable(getResources().getDrawable(R.drawable.ic_fragment_tables_disabled));
+                            tableFour.setBackground(null);
+                            updateStatus = "Vacant";
+                        }
+                        textFour.append("Table Four" + "\n" + "Table Price: " + tableFourObject.getTableprice() + "\n" + "Table Status: " + updateStatus);
+                    }
+                } else {
+                    Log.d(TAG, "Table db details: null");
+                }
+            }
+        });
+    }
+
+}
+    /*
     public void RespondServerResponse(int tablenumber){
 
         String status;
@@ -149,9 +261,11 @@ public class TablesFragment extends Fragment {
                 break;
         }
     }
+     */
 
-    public void CheckServerResponse(){
-        DocumentReference docRefTableOne = db.collection("tables").document("tableOne");
+    /*
+    public void CheckDataBaseOnce(){
+        docRefTableOne = db.collection("tables").document("tableOne");
         docRefTableOne.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -162,7 +276,7 @@ public class TablesFragment extends Fragment {
             }
         });
 
-        DocumentReference docRefTableTwo = db.collection("tables").document("tableTwo");
+        docRefTableTwo = db.collection("tables").document("tableTwo");
         docRefTableTwo.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -173,7 +287,7 @@ public class TablesFragment extends Fragment {
             }
         });
 
-        DocumentReference docRefTableThree = db.collection("tables").document("tableThree");
+        docRefTableThree = db.collection("tables").document("tableThree");
         docRefTableThree.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -184,7 +298,7 @@ public class TablesFragment extends Fragment {
             }
         });
 
-        DocumentReference docRefTableFour = db.collection("tables").document("tableFour");
+        docRefTableFour = db.collection("tables").document("tableFour");
         docRefTableFour.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -195,4 +309,5 @@ public class TablesFragment extends Fragment {
             }
         });
     }
-}
+    */
+

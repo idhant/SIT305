@@ -15,12 +15,6 @@
         android:layout_height="match_parent"
         tools:context=".ui.tables.TablesFragment">
 
-        <ProgressBar
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/fragment_tables_progressbar"
-            style="?android:attr/progressBarStyle" />
-
         <TableRow
             android:layout_marginBottom="20dp"
             android:layout_marginTop="20dp"
