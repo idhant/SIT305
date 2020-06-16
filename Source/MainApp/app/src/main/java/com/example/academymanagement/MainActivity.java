@@ -1,6 +1,7 @@
 package com.example.academymanagement;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
@@ -135,6 +136,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Create a reference to the drawer layout in activity_main.xml
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        AnimationDrawable animationDrawable = (AnimationDrawable) drawer.getBackground();
+        animationDrawable.setEnterFadeDuration(2000);
+        animationDrawable.setExitFadeDuration(4000);
+        animationDrawable.start();
 
         // Create a reference to the navView in activity_main.xml
         NavigationView navigationView = findViewById(R.id.nav_view);
