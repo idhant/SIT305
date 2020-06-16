@@ -2,6 +2,8 @@ package com.example.academymanagement;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
@@ -9,11 +11,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.academymanagement.models.Customer;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -25,6 +33,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import org.w3c.dom.Text;
+
+import java.util.logging.Logger;
 
 /*
 *Breakdown of different views:
@@ -44,11 +54,18 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private Button logoutButton;
 
     private String logName;
     private String logEmail;
+
+    private static final String TAG="MainActivity";
+    Customer customer;
+
+    private TextView navName;
+    private TextView navUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +119,17 @@ public class MainActivity extends AppCompatActivity {
             String uid = user.getUid();
         }
 
+        DocumentReference docRef = db.collection("customers").document(logEmail);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                customer = documentSnapshot.toObject(Customer.class);
+                if(customer != null)
+                    Log.d(TAG, "Customer details:" + customer.getEmail());
+
+            }
+        });
+
         // Create a reference to the drawer layout in activity_main.xml
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
@@ -111,10 +139,21 @@ public class MainActivity extends AppCompatActivity {
         // Create a reference to the header of nav bar
         View headerView = navigationView.getHeaderView(0);
         // Append username and email of current user.
-        TextView navName = (TextView) headerView.findViewById(R.id.menu_name);
-        TextView navUsername = (TextView) headerView.findViewById(R.id.menu_username);
-        navName.setText(logName);
-        navUsername.setText(logEmail);
+        navName = headerView.findViewById(R.id.menu_name);
+        navUsername = headerView.findViewById(R.id.menu_username);
+
+        //TODO: Implement async function instead
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(customer != null) {
+                    navName.setText(customer.getUsername());
+                }
+                navUsername.setText(logEmail);
+            }
+        }, 3000);
+
+
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -41,12 +42,17 @@ public class TablesFragment extends Fragment {
 
     private TextView textOne, textTwo, textThree, textFour;
 
+    private ProgressBar progressBar;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_tables, container, false);
 
+        progressBar = root.findViewById(R.id.fragment_tables_progressbar);
+        progressBar.setVisibility(root.VISIBLE);
         CheckServerResponse();
+
 
         tableOne = root.findViewById(R.id.fragment_tables_one);
         tableTwo = root.findViewById(R.id.fragment_tables_two);
@@ -78,6 +84,7 @@ public class TablesFragment extends Fragment {
             }
         }, 3000);
 
+        progressBar.setVisibility(root.INVISIBLE);
         return root;
     }
 

@@ -28,11 +28,12 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-
+    // private variables for text fields and buttons
     private EditText login_email, login_password;
     private Button login_button_login;
     private TextView login_button_register;
 
+    // Firebase variables
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
 
@@ -97,7 +98,6 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this,"Error Occurred!",Toast.LENGTH_SHORT).show();
 
                 }
-
             }
         });
 

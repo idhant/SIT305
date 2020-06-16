@@ -12,12 +12,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.academymanagement.models.Customer;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.core.Tag;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -28,10 +30,13 @@ import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    // Private variables for the text fields
     private EditText register_email, register_password, register_confirm_password, register_username;
+    // Private variables for the buttons
     private Button register_button_register;
     private TextView register_button_login;
 
+    // reference to the firebase auth
     private FirebaseAuth firebaseAuth;
 
     // Access a Cloud Firestore instance from your Activity
@@ -42,12 +47,16 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        // Checking if the user is already logged in
         firebaseAuth = FirebaseAuth.getInstance();
+
+        // Taking input from the user
         register_email = findViewById(R.id.register_email);
         register_password = findViewById(R.id.register_password);
         register_confirm_password = findViewById(R.id.register_confirm_password);
         register_username = findViewById(R.id.register_username);
 
+        // referencing the buttons
         register_button_register = findViewById(R.id.register_button_register);
         register_button_login = findViewById(R.id.register_button_login);
 
@@ -90,27 +99,21 @@ public class RegisterActivity extends AppCompatActivity {
                                 Toast.makeText(RegisterActivity.this,"Registration Unsuccessful, Please Try Again",Toast.LENGTH_SHORT).show();
                             }
                             else {
-                                Map<String, Object> user = new HashMap<>();
-                                user.put("email", email);
-                                user.put("name", username);
-                                // Add a new document with a generated ID
-                                db.collection("users")
-                                        .document(username).set(user)
+                                int credits = 0;
+                                Customer customer = new Customer(username, email, credits);
+                                db.collection("customers").document(email).set(customer)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Toast.makeText(RegisterActivity.this, "DocumentSnapshot added with ID: " + username,Toast.LENGTH_SHORT).show();
-                                                //Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 Toast.makeText(RegisterActivity.this, "Error adding document", Toast.LENGTH_SHORT).show();
-                                                //Log.w(TAG, "Error adding document", e);
                                             }
                                         });
-
                                 startActivity(new Intent(RegisterActivity.this,MainActivity.class));
                             }
                         }
@@ -118,11 +121,11 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 else{
                     Toast.makeText(RegisterActivity.this,"Error Occurred!",Toast.LENGTH_SHORT).show();
-
                 }
             }
         });
 
+        // Opening the login activity
         register_button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
