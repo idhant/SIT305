@@ -7,13 +7,15 @@ public class Customer {
     private String username;
     private int credits;
     //private String photo;
+    private int points;
 
     public Customer() {}
 
-    public Customer(String username, String email, int credits) {
+    public Customer(String username, String email, int credits, int points) {
         this.username = username;
         this.email = email;
         this.credits = credits;
+        this.points = points;
     }
 
     public String getEmail() {
@@ -27,6 +29,11 @@ public class Customer {
     public int getCredits(){
         return credits;
     }
+
+    public int getPoints(){
+        return points;
+    }
+
     public String setEmail(String email){
         this.email = email;
         String mes = "Your new email is:" + email;

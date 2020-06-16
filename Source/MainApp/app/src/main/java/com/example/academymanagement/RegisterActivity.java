@@ -100,7 +100,8 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                             else {
                                 int credits = 0;
-                                Customer customer = new Customer(username, email, credits);
+                                int points = 0;
+                                Customer customer = new Customer(username, email, credits, points);
                                 db.collection("customers").document(email).set(customer)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override

@@ -47,6 +47,12 @@ public class CreditsFragment extends Fragment {
     private int currentCredits;
     private int addCredits;
 
+    // variables to add reward points which can be gained by purchasing credits.
+    private int currentPoints;
+    private int addPoints;
+
+    private int creditsToPoints = 10;
+
     // boolean to check if all conditions are met for adding credits
     private boolean safeToAdd;
 
@@ -99,7 +105,9 @@ public class CreditsFragment extends Fragment {
                     addCredits = Integer.parseInt(purchaseAmountValue.getText().toString());
                     if(addCredits >= 0) {
                         safeToAdd = true;
+                        addPoints = addCredits;
                         addCredits = currentCredits + addCredits;
+                        addPoints = currentPoints + addPoints;
                     }
                     else{
                         safeToAdd = false;
@@ -114,12 +122,14 @@ public class CreditsFragment extends Fragment {
                 }
 
                 if (safeToAdd){
-                    documentReference.update("credits", addCredits)
+                    documentReference.update("credits", addCredits, "points", addPoints)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Log.d(TAG, "Added Credits: " + addCredits);
-                                    Toast.makeText(getActivity(), "Added Credits: " + addCredits, Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "Current Credits: " + addCredits);
+                                    Log.d(TAG, "Current Reward Points: " + addPoints);
+                                    Toast.makeText(getActivity(), "Current Credits: " + addCredits, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "Current Reward Points: " + addPoints, Toast.LENGTH_SHORT).show();
                                     purchaseAmountValue.setText("");
                                 }
                             })
@@ -171,9 +181,11 @@ public class CreditsFragment extends Fragment {
                         Log.d(TAG, "Customer db email:" + customer.getEmail());
                         Log.d(TAG, "Customer db credits:" + customer.getCredits());
                         Log.d(TAG, "Customer db username:" + customer.getUsername());
+                        Log.d(TAG, "Customer db points:" + customer.getPoints());
                         //TODO: Set this string using strings.xml
                         currentAmountText.setText("Current available Credits: " + customer.getCredits());
                         currentCredits = customer.getCredits();
+                        currentPoints = customer.getPoints();
                     }
                 }
                 else {

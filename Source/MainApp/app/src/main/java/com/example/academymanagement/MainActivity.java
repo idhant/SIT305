@@ -1,6 +1,7 @@
 package com.example.academymanagement;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView navName;
     private TextView navUsername;
+    private ImageView navImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +144,8 @@ public class MainActivity extends AppCompatActivity {
         // Append username and email of current user.
         navName = headerView.findViewById(R.id.menu_name);
         navUsername = headerView.findViewById(R.id.menu_username);
+        navImage = headerView.findViewById(R.id.menu_photo);
+
 
         //TODO: Implement async function instead
         new Handler().postDelayed(new Runnable() {
@@ -150,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
                     navName.setText(customer.getUsername());
                 }
                 navUsername.setText(logEmail);
+                navImage.setImageResource(R.drawable.ic_menu_user_photo);
             }
         }, 3000);
 
