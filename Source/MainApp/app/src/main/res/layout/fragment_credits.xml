@@ -34,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.596" />
+        app:layout_constraintVertical_bias="0.59" />
 
     <ImageButton
         android:id="@+id/fragment_credits_credits_purchase_button"
@@ -50,15 +50,14 @@
 
     <TextView
         android:id="@+id/fragment_credits_credits_purchase_text"
-        android:layout_width="270dp"
-        android:layout_height="26dp"
+        android:layout_width="273dp"
+        android:layout_height="69dp"
         android:text="Enter the amount you want to purchase."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.429" />
 
     <TextView
         android:id="@+id/fragment_credits_credits_current_text"
@@ -67,8 +66,9 @@
         android:text="Current Coins: waiting for db"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.338" />
+        app:layout_constraintVertical_bias="0.269" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
