@@ -119,14 +119,17 @@ public class HistoryFragment extends Fragment{
         tableRowTimeHeading.setText("Time: ");
         tableRowTimeHeading.setTextColor(Color.WHITE);
         tableRowTimeHeading.setGravity(Gravity.CENTER);
+        tableRowTimeHeading.setTextSize(20);
         tableRowHeading.addView(tableRowTimeHeading);
         tableRowCategoryHeading.setText("Category: ");
         tableRowCategoryHeading.setTextColor(Color.WHITE);
         tableRowCategoryHeading.setGravity(Gravity.CENTER);
+        tableRowCategoryHeading.setTextSize(20);
         tableRowHeading.addView(tableRowCategoryHeading);
         tableRowChangeHeading.setText("Change: ");
         tableRowChangeHeading.setTextColor(Color.WHITE);
         tableRowChangeHeading.setGravity(Gravity.CENTER);
+        tableRowChangeHeading.setTextSize(20);
         tableRowHeading.addView(tableRowChangeHeading);
 
         tableLayout.addView(tableRowHeading, 0);
@@ -169,15 +172,18 @@ public class HistoryFragment extends Fragment{
                                 tableRowTime.setText(dateText);
                                 tableRowTime.setTextColor(Color.WHITE);
                                 tableRowTime.setGravity(Gravity.CENTER);
+                                tableRowTime.setTextSize(18);
                                 row.addView(tableRowTime);
                                 tableRowCategory.setText(history.getCategory());
                                 tableRowCategory.setTextColor(Color.WHITE);
                                 tableRowCategory.setGravity(Gravity.CENTER);
+                                tableRowCategory.setTextSize(18);
                                 row.addView(tableRowCategory);
                                 int change = history.getChange();
                                 tableRowChange.setText("" + change);
                                 tableRowChange.setTextColor(Color.WHITE);
                                 tableRowChange.setGravity(Gravity.CENTER);
+                                tableRowChange.setTextSize(18);
                                 row.addView(tableRowChange);
 
                                 //tableLayout.addView(row);

@@ -41,11 +41,13 @@ public class CreditsFragment extends Fragment {
     // variable to store the customer details retrieved from the database
     private Customer customer;
 
+    // variables to store history details and push them to firestore
     private History creditHistory, pointsHistory;
 
     // Firestore database reference
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    // variable to store the current time and push it as a parameter in the history contructor
     private Date currentTime;
 
     // variable to store the email of current logged-in user
@@ -62,7 +64,7 @@ public class CreditsFragment extends Fragment {
     private int currentPoints;
     private int addPoints;
 
-    private int creditsToPoints = 10;
+    //private int creditsToPoints = 10;
 
     // variables for history class
     private String creditCategory = "Credits";
@@ -74,6 +76,7 @@ public class CreditsFragment extends Fragment {
     // database reference to the current logged-in user details
     private DocumentReference docRefCredits;
 
+    // database reference to the collection
     private CollectionReference colRefHistory;
 
     // variables for layout objects

@@ -16,32 +16,48 @@ import androidx.fragment.app.Fragment;
 import com.example.academymanagement.LoginActivity;
 import com.example.academymanagement.R;
 import com.example.academymanagement.models.Customer;
+import com.example.academymanagement.models.History;
 import com.example.academymanagement.models.Rewards;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.annotations.Nullable;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 public class RewardFragment extends Fragment{
 
     // variables to store the customer details retrieved from the database
     private Rewards rewardOneObject, rewardTwoObject, rewardThreeObject;
+
+    // variables to store history details and push them to firestore
+    private History creditHistory, pointsHistory;
+
+    // variable to store customer reference
+    private Customer customer;
 
     //variables to store the virtual rewards
     final private int rewardOneCredits = 30;
     final private int rewardTwoCredits = 150;
     final private int rewardThreeCredits = 300;
 
-    private Customer customer;
+    // variables for history class
+    private String creditCategory = "Credits";
+    private String pointsCategory = "Points";
 
     // Firestore database reference
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    // variable to store the current time and push it as a parameter in the history contructor
+    private Date currentTime;
 
     // variable to store the email of current logged-in user
     private String logEmail;
@@ -51,6 +67,9 @@ public class RewardFragment extends Fragment{
 
     // database reference to the reward details
     private DocumentReference docRefRewardOne, docRefRewardTwo, docRefRewardThree, docRefCustomer;
+
+    // database reference to the collection
+    private CollectionReference colRefHistory;
 
     private TextView textView;
 
@@ -63,6 +82,9 @@ public class RewardFragment extends Fragment{
     private int currentPoints;
     private int addCredits;
     private int remainingPoints;
+    private int addPoints;
+
+    private int pointsChange, creditsChange;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -86,6 +108,9 @@ public class RewardFragment extends Fragment{
         docRefRewardThree = db.collection("rewards").document("rewardThree");
         docRefCustomer = db.collection("customers").document(logEmail);
 
+        // Storing the path of collection(history)/document(email of user)/collection(details)
+        colRefHistory = db.collection("history").document(logEmail).collection("details");
+
         textView.setText("List of redeemable rewards.");
 
         CheckDatabaseRealtime();
@@ -105,7 +130,13 @@ public class RewardFragment extends Fragment{
                     Toast.makeText(getActivity(), "You are eligible for this reward, your account has been credited " + rewardOneCredits + "credits!", Toast.LENGTH_SHORT).show();
 
                     remainingPoints = currentPoints - rewardOneObject.getPrice();
+                    pointsChange = -rewardOneObject.getPrice();
                     addCredits = customer.getCredits() + rewardOneCredits;
+                    creditsChange = + rewardOneCredits;
+
+                    currentTime = GregorianCalendar.getInstance().getTime();
+                    creditHistory = new History(currentTime, creditCategory, creditsChange, logEmail);
+                    pointsHistory = new History(currentTime, pointsCategory, pointsChange, logEmail);
 
                     docRefCustomer.update("points", remainingPoints, "credits", addCredits)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -122,6 +153,34 @@ public class RewardFragment extends Fragment{
                                 public void onFailure(@NonNull Exception e) {
                                     Log.d(TAG, "Failed to redeem rewards.");
                                     Toast.makeText(getActivity(), "Failed to redeem rewards.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                    colRefHistory.add(creditHistory)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d(TAG, "Credits history recorded.");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "Failed to record credit history.");
+                                }
+                            });
+
+                    colRefHistory.add(pointsHistory)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d(TAG, "Points history recorded.");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "Failed to record point history");
                                 }
                             });
                 }
@@ -143,7 +202,13 @@ public class RewardFragment extends Fragment{
                     Toast.makeText(getActivity(), "You are eligible for this reward, your account has been credited " + rewardTwoCredits + "credits!", Toast.LENGTH_SHORT).show();
 
                     remainingPoints = currentPoints - rewardTwoObject.getPrice();
+                    pointsChange = -rewardTwoObject.getPrice();
                     addCredits = customer.getCredits() + rewardTwoCredits;
+                    creditsChange = + rewardTwoCredits;
+
+                    currentTime = GregorianCalendar.getInstance().getTime();
+                    creditHistory = new History(currentTime, creditCategory, creditsChange, logEmail);
+                    pointsHistory = new History(currentTime, pointsCategory, pointsChange, logEmail);
 
                     docRefCustomer.update("points", remainingPoints, "credits", addCredits)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -160,6 +225,34 @@ public class RewardFragment extends Fragment{
                                 public void onFailure(@NonNull Exception e) {
                                     Log.d(TAG, "Failed to redeem rewards.");
                                     Toast.makeText(getActivity(), "Failed to redeem rewards.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                    colRefHistory.add(creditHistory)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d(TAG, "Credits history recorded.");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "Failed to record credit history.");
+                                }
+                            });
+
+                    colRefHistory.add(pointsHistory)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d(TAG, "Points history recorded.");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "Failed to record point history");
                                 }
                             });
                 }
@@ -181,7 +274,13 @@ public class RewardFragment extends Fragment{
                     Toast.makeText(getActivity(), "You are eligible for this reward, your account has been credited " + rewardThreeCredits + "credits!", Toast.LENGTH_SHORT).show();
 
                     remainingPoints = currentPoints - rewardThreeObject.getPrice();
+                    pointsChange = -rewardThreeObject.getPrice();
                     addCredits = customer.getCredits() + rewardThreeCredits;
+                    creditsChange = + rewardThreeCredits;
+
+                    currentTime = GregorianCalendar.getInstance().getTime();
+                    creditHistory = new History(currentTime, creditCategory, creditsChange, logEmail);
+                    pointsHistory = new History(currentTime, pointsCategory, pointsChange, logEmail);
 
                     docRefCustomer.update("points", remainingPoints, "credits", addCredits)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -198,6 +297,34 @@ public class RewardFragment extends Fragment{
                                 public void onFailure(@NonNull Exception e) {
                                     Log.d(TAG, "Failed to redeem rewards.");
                                     Toast.makeText(getActivity(), "Failed to redeem rewards.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                    colRefHistory.add(creditHistory)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d(TAG, "Credits history recorded.");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "Failed to record credit history.");
+                                }
+                            });
+
+                    colRefHistory.add(pointsHistory)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d(TAG, "Points history recorded.");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "Failed to record point history");
                                 }
                             });
                 }
