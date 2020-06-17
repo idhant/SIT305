@@ -102,6 +102,10 @@ public class RewardFragment extends Fragment{
 
         CheckCurrentUser();
 
+        rewardOneButton.setBackground(null);
+        rewardTwoButton.setBackground(null);
+        rewardThreeButton.setBackground(null);
+
         // Storing the path of collection(rewards)/document(email of user)
         docRefRewardOne = db.collection("rewards").document("rewardOne");
         docRefRewardTwo = db.collection("rewards").document("rewardTwo");

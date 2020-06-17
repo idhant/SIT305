@@ -40,12 +40,15 @@
                 android:id="@+id/fragment_history_table_layout"
                 android:layout_width="match_parent"
                 android:layout_height="650dp"
+                android:layout_marginTop="15dp"
+                android:gravity="top"
+                android:padding="10dp"
+                android:stretchColumns="*"
+                android:background="@drawable/background_fragment_history"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.962"
                 tools:layout_editor_absoluteX="0dp">
-
-
             </TableLayout>
 
         </RelativeLayout>

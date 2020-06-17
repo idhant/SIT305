@@ -115,21 +115,26 @@ public class HistoryFragment extends Fragment{
 
         TableRow.LayoutParams layoutParamsHeading = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
         tableRowHeading.setLayoutParams(layoutParamsHeading);
+        tableRowHeading.setPadding(5,5,5,5);
 
         tableRowTimeHeading.setText("Time: ");
         tableRowTimeHeading.setTextColor(Color.WHITE);
         tableRowTimeHeading.setGravity(Gravity.CENTER);
         tableRowTimeHeading.setTextSize(20);
+        tableRowTimeHeading.setPadding(5,5,5,5);
+        //tableRowTimeHeading.setBackground(Color.GRAY);
         tableRowHeading.addView(tableRowTimeHeading);
         tableRowCategoryHeading.setText("Category: ");
         tableRowCategoryHeading.setTextColor(Color.WHITE);
         tableRowCategoryHeading.setGravity(Gravity.CENTER);
         tableRowCategoryHeading.setTextSize(20);
+        tableRowCategoryHeading.setPadding(5,5,5,5);
         tableRowHeading.addView(tableRowCategoryHeading);
         tableRowChangeHeading.setText("Change: ");
         tableRowChangeHeading.setTextColor(Color.WHITE);
         tableRowChangeHeading.setGravity(Gravity.CENTER);
         tableRowChangeHeading.setTextSize(20);
+        tableRowChangeHeading.setPadding(5,5,5,5);
         tableRowHeading.addView(tableRowChangeHeading);
 
         tableLayout.addView(tableRowHeading, 0);
@@ -158,8 +163,8 @@ public class HistoryFragment extends Fragment{
                                 tableRowChange = new TextView(getActivity());
 
                                 TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
-                                //TableRow.LayoutParams margin = new TableRow.LayoutParams(TableRow.LayoutParams)
                                 row.setLayoutParams(layoutParams);
+                                row.setPadding(5,5,5,5);
 
                                 Long date = history.getTime().getTime();
                                 Date newdate = new Date(date);
@@ -173,17 +178,20 @@ public class HistoryFragment extends Fragment{
                                 tableRowTime.setTextColor(Color.WHITE);
                                 tableRowTime.setGravity(Gravity.CENTER);
                                 tableRowTime.setTextSize(18);
+                                tableRowTime.setPadding(5,5,5,5);
                                 row.addView(tableRowTime);
                                 tableRowCategory.setText(history.getCategory());
                                 tableRowCategory.setTextColor(Color.WHITE);
                                 tableRowCategory.setGravity(Gravity.CENTER);
                                 tableRowCategory.setTextSize(18);
+                                tableRowCategory.setPadding(5,5,5,5);
                                 row.addView(tableRowCategory);
                                 int change = history.getChange();
                                 tableRowChange.setText("" + change);
                                 tableRowChange.setTextColor(Color.WHITE);
                                 tableRowChange.setGravity(Gravity.CENTER);
                                 tableRowChange.setTextSize(18);
+                                tableRowChange.setPadding(5,5,5,5);
                                 row.addView(tableRowChange);
 
                                 //tableLayout.addView(row);
