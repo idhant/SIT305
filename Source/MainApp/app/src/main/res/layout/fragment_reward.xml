@@ -34,7 +34,7 @@
         app:layout_constraintHorizontal_bias="0.125"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.26999998" />
+        app:layout_constraintVertical_bias="0.27" />
 
     <ImageButton
         android:id="@+id/fragment_reward_reward_two_button"
@@ -42,12 +42,12 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#FFFFFF"
         android:src="@drawable/ic_fragment_reward_reward"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_reward_reward_three_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.125"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.862" />
+        app:layout_constraintVertical_bias="0.57" />
 
     <ImageButton
         android:id="@+id/fragment_reward_reward_three_button"
@@ -60,44 +60,47 @@
         app:layout_constraintHorizontal_bias="0.125"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.836" />
+        app:layout_constraintVertical_bias="0.87" />
 
     <TextView
         android:id="@+id/fragment_reward_reward_one_text"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="100dp"
+        android:maxWidth="200dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.752"
+        app:layout_constraintHorizontal_bias="0.846"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.266" />
+        app:layout_constraintVertical_bias="0.27" />
 
     <TextView
         android:id="@+id/fragment_reward_reward_two_text"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="100dp"
+        android:maxWidth="200dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.752"
+        app:layout_constraintHorizontal_bias="0.846"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.538" />
+        app:layout_constraintVertical_bias="0.57" />
 
     <TextView
         android:id="@+id/fragment_reward_reward_three_text"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="100dp"
+        android:maxWidth="200dp"
         android:text="TextView"
         app:autoSizeTextType="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.752"
+        app:layout_constraintHorizontal_bias="0.846"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.811" />
+        app:layout_constraintVertical_bias="0.87" />
 
     <TextView
         android:id="@+id/fragment_reward_reward_points"
@@ -106,9 +109,8 @@
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.119" />
+        app:layout_constraintVertical_bias="0.125" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
