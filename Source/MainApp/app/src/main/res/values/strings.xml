@@ -39,4 +39,9 @@
     <string name="register_username">Please write a custom username</string>
     <string name="title_activity_register">Register Activity</string>
 
+
+    <string name="fragment_history_table_time">Timestamp</string>
+    <string name="fragment_history_table_category">Category</string>
+    <string name="fragment_history_table_change">Change</string>
+
 </resources>

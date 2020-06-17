@@ -19,23 +19,34 @@ import com.example.academymanagement.LoginActivity;
 import com.example.academymanagement.R;
 import com.example.academymanagement.models.Customer;
 
+import com.example.academymanagement.models.History;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 public class CreditsFragment extends Fragment {
 
     // variable to store the customer details retrieved from the database
     private Customer customer;
 
+    private History creditHistory, pointsHistory;
+
     // Firestore database reference
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private Date currentTime;
 
     // variable to store the email of current logged-in user
     private String logEmail;
@@ -53,11 +64,17 @@ public class CreditsFragment extends Fragment {
 
     private int creditsToPoints = 10;
 
+    // variables for history class
+    private String creditCategory = "Credits";
+    private String pointsCategory = "Points";
+
     // boolean to check if all conditions are met for adding credits
     private boolean safeToAdd;
 
     // database reference to the current logged-in user details
-    private DocumentReference documentReference;
+    private DocumentReference docRefCredits;
+
+    private CollectionReference colRefHistory;
 
     // variables for layout objects
     private TextView textView;
@@ -82,7 +99,10 @@ public class CreditsFragment extends Fragment {
         CheckCurrentUser();
 
         // Storing the path of collection(customers)/document(email of user)
-        documentReference = db.collection("customers").document(logEmail);
+        docRefCredits = db.collection("customers").document(logEmail);
+
+        // Storing the path of collection(history)/document(email of user)/collection(details)
+        colRefHistory = db.collection("history").document(logEmail).collection("details");
 
         //CheckDatabaseOnce();
         // retrieving data whenever change is detected in any fields
@@ -106,6 +126,11 @@ public class CreditsFragment extends Fragment {
                     if(addCredits >= 0) {
                         safeToAdd = true;
                         addPoints = addCredits;
+
+                        currentTime = GregorianCalendar.getInstance().getTime();
+                        creditHistory = new History(currentTime, creditCategory, addCredits, logEmail);
+                        pointsHistory = new History(currentTime, pointsCategory, addPoints, logEmail);
+
                         addCredits = currentCredits + addCredits;
                         addPoints = currentPoints + addPoints;
                     }
@@ -122,7 +147,7 @@ public class CreditsFragment extends Fragment {
                 }
 
                 if (safeToAdd){
-                    documentReference.update("credits", addCredits, "points", addPoints)
+                    docRefCredits.update("credits", addCredits, "points", addPoints)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -138,6 +163,34 @@ public class CreditsFragment extends Fragment {
                                 public void onFailure(@NonNull Exception e) {
                                     Log.d(TAG, "Failed to add credits.");
                                     Toast.makeText(getActivity(), "Failed to add credits!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                    colRefHistory.add(creditHistory)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d(TAG, "Credits history recorded.");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "Failed to record credit history.");
+                                }
+                            });
+
+                    colRefHistory.add(pointsHistory)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d(TAG, "Points history recorded.");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "Failed to record point history");
                                 }
                             });
                 }
@@ -167,7 +220,7 @@ public class CreditsFragment extends Fragment {
 
     // Checks the changes to the document real time and updates the credit fields
     private void CheckDatabaseRealtime(){
-        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        docRefCredits.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot,
                                 @Nullable FirebaseFirestoreException e) {
@@ -197,7 +250,7 @@ public class CreditsFragment extends Fragment {
 
     private void CheckDatabaseOnce(){
         // Retrieving data from the database and storing in the Customer class object
-        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        docRefCredits.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 customer = documentSnapshot.toObject(Customer.class);
