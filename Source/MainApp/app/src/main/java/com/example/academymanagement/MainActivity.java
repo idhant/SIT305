@@ -24,9 +24,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -66,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG="MainActivity";
     Customer customer;
+
+    private DocumentReference docRefCustomer;
 
     private TextView navName;
     private TextView navUsername;
@@ -123,16 +128,9 @@ public class MainActivity extends AppCompatActivity {
             String uid = user.getUid();
         }
 
-        DocumentReference docRef = db.collection("customers").document(logEmail);
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                customer = documentSnapshot.toObject(Customer.class);
-                if(customer != null)
-                    Log.d(TAG, "Customer details:" + customer.getEmail());
+        docRefCustomer = db.collection("customers").document(logEmail);
 
-            }
-        });
+        CheckDatabaseRealtime();
 
         // Create a reference to the drawer layout in activity_main.xml
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -152,18 +150,18 @@ public class MainActivity extends AppCompatActivity {
         navImage = headerView.findViewById(R.id.menu_photo);
 
 
-        //TODO: Implement async function instead
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(customer != null) {
-                    navName.setText(customer.getUsername());
-                }
-                navUsername.setText(logEmail);
-                navImage.setImageResource(R.drawable.ic_menu_user_photo);
-            }
-        }, 3000);
-
+//        //TODO: Implement async function instead
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                if(customer != null) {
+//                    navName.setText(customer.getUsername());
+//                }
+//                navUsername.setText(logEmail);
+//                navImage.setImageResource(R.drawable.ic_menu_user_photo);
+//            }
+//        }, 3000);
+//
 
 
         // Passing each menu ID as a set of Ids because each
@@ -200,5 +198,34 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    // Checks the changes to the document real time and updates the credit fields
+    private void CheckDatabaseRealtime() {
+        docRefCustomer.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    customer = documentSnapshot.toObject(Customer.class);
+                    if (customer != null) {
+                        Log.d(TAG, "Customer db email:" + customer.getEmail());
+                        Log.d(TAG, "Customer db credits:" + customer.getCredits());
+                        Log.d(TAG, "Customer db username:" + customer.getUsername());
+                        Log.d(TAG, "Customer db points:" + customer.getPoints());
+
+                        navName.setText(customer.getUsername());
+                        navUsername.setText(logEmail);
+                        navImage.setImageResource(R.drawable.ic_menu_user_photo);
+                    }
+                } else {
+                    Log.d(TAG, "Customer db details: null");
+                }
+            }
+        });
     }
 }
