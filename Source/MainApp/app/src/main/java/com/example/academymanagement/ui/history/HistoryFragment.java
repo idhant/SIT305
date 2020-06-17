@@ -42,9 +42,6 @@ import java.util.Date;
 
 public class HistoryFragment extends Fragment{
 
-    // variable to store the customer details retrieved from the database
-    private ArrayList<History> historyArrayList;
-
     private History history;
 
     // Firestore database reference
@@ -153,9 +150,9 @@ public class HistoryFragment extends Fragment{
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 history = document.toObject(History.class);
-                                Log.d(TAG, "History db Time: " + history.getTime());
-                                Log.d(TAG, "History db Category: " + history.getCategory());
-                                Log.d(TAG, "History db change: " + history.getChange());
+                                Log.d(TAG, tableRowIndex + "History db Time: " + history.getTime());
+                                Log.d(TAG, tableRowIndex + "History db Category: " + history.getCategory());
+                                Log.d(TAG, tableRowIndex + "History db change: " + history.getChange());
 
                                 TableRow row = new TableRow(getActivity());
                                 tableRowTime = new TextView(getActivity());
