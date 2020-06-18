@@ -1,0 +1,21 @@
+Week (May 18 - May 24)
+1.Added Initial Commits with repo structure
+2. Testing the navigation layout
+3. Selecting the navigation layout and implementing base activities and fragments
+4. Testing the firebase database
+5. Adding Login and registration activities
+
+Week (June 14 - June 19)
+1. Added Different class models for firebase
+2. Added table fragment functionality
+3. Added contact_info fragment functionality
+4. Added credits fragment functionality
+5. Added realtime updates in all fragments
+6. Added rewards fragment functionality
+7. Added gradient animations
+8. Added history fragment functionality
+9. Added home fragment functionality
+10. Added leaderboard fragment functionality
+11. Added settings fragment functionality
+12. Cleaning the code and making comments
+13. Setting navigation paths 
