@@ -22,7 +22,6 @@ import com.example.academymanagement.models.Customer;
 import com.example.academymanagement.models.History;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -32,7 +31,6 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -54,7 +52,7 @@ public class CreditsFragment extends Fragment {
     private String logEmail;
 
     // TAG variable for debugging
-    private static final String TAG="CreditsFragment:";
+    private static final String TAG="Credits Fragment: ";
 
     // variables to store current and to be added credits
     private int currentCredits;
@@ -99,6 +97,7 @@ public class CreditsFragment extends Fragment {
         purchaseAmountText = root.findViewById(R.id.fragment_credits_credits_purchase_text);
         purchaseAmountButton = root.findViewById(R.id.fragment_credits_credits_purchase_button);
 
+        // Check if the user has already logged in, if true direct to customeractivity
         CheckCurrentUser();
 
         // Storing the path of collection(customers)/document(email of user)
@@ -121,6 +120,59 @@ public class CreditsFragment extends Fragment {
 
         // Listening to clicks on the add credits button
         // If all addition conditions are met (value not null, value not negative), database is updated
+        SetButtonListener();
+
+        return root;
+    }
+
+    // Checking the current logged in user
+    // If no user is logged-in redirects the user back to login page else continue
+    private void CheckCurrentUser(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            logEmail = user.getEmail();
+            Log.d(TAG, "Logged In Customer Email:" + logEmail);
+        }
+        else {
+            Log.d(TAG, "User hasn`t logged-in, redirecting to login activity.");
+            Toast.makeText(getActivity(), "User hasn`t logged-in, redirecting to login activity.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getActivity(),LoginActivity.class));
+        }
+    }
+
+    // Checks the changes to the document real time and updates the credit fields
+    private void CheckDatabaseRealtime(){
+        docRefCredits.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    customer = documentSnapshot.toObject(Customer.class);
+                    if(customer != null){
+                        Log.d(TAG, "Customer db email:" + customer.getEmail());
+                        Log.d(TAG, "Customer db credits:" + customer.getCredits());
+                        Log.d(TAG, "Customer db username:" + customer.getUsername());
+                        Log.d(TAG, "Customer db points:" + customer.getPoints());
+                        //TODO: Set this string using strings.xml
+                        currentAmountText.setText("Current available Credits: " + customer.getCredits());
+                        currentCredits = customer.getCredits();
+                        currentPoints = customer.getPoints();
+                    }
+                }
+                else {
+                    Log.d(TAG, "Customer db details: null");
+                }
+            }
+        });
+    }
+
+    // When the button is clicked the value is taken and checked, if it is appropriate it is sent to be
+    // stored in the database.
+    public void SetButtonListener(){
         purchaseAmountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,52 +252,6 @@ public class CreditsFragment extends Fragment {
                 else {
                     Log.d(TAG, "Conditions to addition of new credits not met.");
                     Toast.makeText(getActivity(), "Conditions to addition of new credits not met.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        return root;
-    }
-
-    // Checking the current logged in user
-    // If no user is logged-in redirects the user back to login page else continue
-    private void CheckCurrentUser(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            logEmail = user.getEmail();
-            Log.d(TAG, "Logged In Customer Email:" + logEmail);
-        }
-        else {
-            Log.d(TAG, "User hasn`t logged-in, redirecting to login activity.");
-            Toast.makeText(getActivity(), "User hasn`t logged-in, redirecting to login activity.", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getActivity(),LoginActivity.class));
-        }
-    }
-
-    // Checks the changes to the document real time and updates the credit fields
-    private void CheckDatabaseRealtime(){
-        docRefCredits.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
-                if (documentSnapshot != null && documentSnapshot.exists()) {
-                    customer = documentSnapshot.toObject(Customer.class);
-                    if(customer != null){
-                        Log.d(TAG, "Customer db email:" + customer.getEmail());
-                        Log.d(TAG, "Customer db credits:" + customer.getCredits());
-                        Log.d(TAG, "Customer db username:" + customer.getUsername());
-                        Log.d(TAG, "Customer db points:" + customer.getPoints());
-                        //TODO: Set this string using strings.xml
-                        currentAmountText.setText("Current available Credits: " + customer.getCredits());
-                        currentCredits = customer.getCredits();
-                        currentPoints = customer.getPoints();
-                    }
-                }
-                else {
-                    Log.d(TAG, "Customer db details: null");
                 }
             }
         });

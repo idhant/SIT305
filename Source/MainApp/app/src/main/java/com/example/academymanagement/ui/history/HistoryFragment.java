@@ -15,10 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.example.academymanagement.LoginActivity;
 import com.example.academymanagement.R;
@@ -28,20 +25,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class HistoryFragment extends Fragment{
 
+    // variable for the History class object
     private History history;
 
     // Firestore database reference
@@ -51,7 +44,7 @@ public class HistoryFragment extends Fragment{
     private String logEmail;
 
     // TAG variable for debugging
-    private static final String TAG="HistoryFragment:";
+    private static final String TAG="History Fragment: ";
 
     // database reference to the current logged-in user details
     private CollectionReference colRefHistory;
@@ -60,14 +53,15 @@ public class HistoryFragment extends Fragment{
     private String creditCategory = "Credits";
     private String pointsCategory = "Points";
 
+    // private variables for the objects
     private TextView textView;
-
     private TableLayout tableLayout;
     private TextView tableRowTime, tableRowCategory, tableRowChange;
     private TextView tableRowTimeHeading, tableRowCategoryHeading, tableRowChangeHeading;
     private TableRow tableRowHeading;
     private int tableRowIndex = 1;
 
+    // variable for date conversion
     private SimpleDateFormat simpleDateFormat;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -75,15 +69,18 @@ public class HistoryFragment extends Fragment{
 
         View root = inflater.inflate(R.layout.fragment_history, container, false);
 
+        // setting the object references
         textView = root.findViewById(R.id.text_history);
         tableLayout = root.findViewById(R.id.fragment_history_table_layout);
         tableLayout.setStretchAllColumns(true);
 
+        // Check if the user has already logged in, if true direct to customeractivity
         CheckCurrentUser();
 
         // Storing the path of collection(history)/document(email of user)/collection(details)/document(automated ID)
         colRefHistory = db.collection("history").document(logEmail).collection("details");
 
+        // Checks the database at the start for information to be filled in the table
         CheckDatabaseOnce();
 
         return root;
@@ -104,6 +101,7 @@ public class HistoryFragment extends Fragment{
         }
     }
 
+    // This function sets the table headings as row with index 0
     public void SetTableHeadings() {
         tableRowHeading = new TableRow(getActivity());
         tableRowTimeHeading = new TextView(getActivity());
@@ -137,6 +135,7 @@ public class HistoryFragment extends Fragment{
         tableLayout.addView(tableRowHeading, 0);
     }
 
+    // This function checks the data base for information and puts it in the table
     public void CheckDatabaseOnce() {
         colRefHistory.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -203,6 +202,7 @@ public class HistoryFragment extends Fragment{
                     }
                 });
     }
+
     /*
     public void CheckDatabaseRealtime(){
         colRefHistory.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -236,5 +236,4 @@ public class HistoryFragment extends Fragment{
     }
 
      */
-
 }

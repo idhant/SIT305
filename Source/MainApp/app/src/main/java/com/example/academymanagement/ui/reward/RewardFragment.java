@@ -63,7 +63,7 @@ public class RewardFragment extends Fragment{
     private String logEmail;
 
     // TAG variable for debugging
-    private static final String TAG="RewardFragment:";
+    private static final String TAG="Reward Fragment: ";
 
     // database reference to the reward details
     private DocumentReference docRefRewardOne, docRefRewardTwo, docRefRewardThree, docRefCustomer;
@@ -79,11 +79,13 @@ public class RewardFragment extends Fragment{
     // variables to store text view references
     private TextView rewardOneText, rewardTwoText, rewardThreeText, rewardPointsText;
 
+    // variables to keep track of points and credits
     private int currentPoints;
     private int addCredits;
     private int remainingPoints;
     private int addPoints;
 
+    // variables to keep track of point and credit change
     private int pointsChange, creditsChange;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -91,6 +93,7 @@ public class RewardFragment extends Fragment{
 
         View root = inflater.inflate(R.layout.fragment_reward, container, false);
 
+        // setting the object references
         textView = root.findViewById(R.id.text_reward);
         rewardOneButton = root.findViewById(R.id.fragment_reward_reward_one_button);
         rewardTwoButton = root.findViewById(R.id.fragment_reward_reward_two_button);
@@ -100,8 +103,10 @@ public class RewardFragment extends Fragment{
         rewardThreeText = root.findViewById(R.id.fragment_reward_reward_three_text);
         rewardPointsText = root.findViewById(R.id.fragment_reward_reward_points);
 
+        // Check if the user has already logged in, if true direct to customeractivity
         CheckCurrentUser();
 
+        // Setting the image background null
         rewardOneButton.setBackground(null);
         rewardTwoButton.setBackground(null);
         rewardThreeButton.setBackground(null);
@@ -117,8 +122,32 @@ public class RewardFragment extends Fragment{
 
         textView.setText("List of redeemable rewards.");
 
+        // retrieving data whenever change is detected in any fields
         CheckDatabaseRealtime();
 
+        // calling the button listener to define the on click events
+        SetButtonListener();
+
+        return root;
+    }
+
+    // Checking the current logged in user
+    // If no user is logged-in redirects the user back to login page else continue
+    private void CheckCurrentUser(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            logEmail = user.getEmail();
+            Log.d(TAG, "Logged In Customer Email:" + logEmail);
+        }
+        else {
+            Log.d(TAG, "User hasn`t logged-in, redirecting to login activity.");
+            Toast.makeText(getActivity(), "User hasn`t logged-in, redirecting to login activity.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+        }
+    }
+
+    // Sets the button listeners
+    private void SetButtonListener(){
         rewardOneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -334,23 +363,6 @@ public class RewardFragment extends Fragment{
                 }
             }
         });
-
-        return root;
-    }
-
-    // Checking the current logged in user
-    // If no user is logged-in redirects the user back to login page else continue
-    private void CheckCurrentUser(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            logEmail = user.getEmail();
-            Log.d(TAG, "Logged In Customer Email:" + logEmail);
-        }
-        else {
-            Log.d(TAG, "User hasn`t logged-in, redirecting to login activity.");
-            Toast.makeText(getActivity(), "User hasn`t logged-in, redirecting to login activity.", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getActivity(), LoginActivity.class));
-        }
     }
 
     // Checks the changes to the document real time and updates the credit fields

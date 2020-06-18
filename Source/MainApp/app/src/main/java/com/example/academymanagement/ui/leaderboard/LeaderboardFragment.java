@@ -40,6 +40,7 @@ import java.util.Date;
 
 public class LeaderboardFragment extends Fragment{
 
+    // variable for the customer class object
     private Customer customer;
 
     // Firestore database reference
@@ -49,7 +50,7 @@ public class LeaderboardFragment extends Fragment{
     private String logEmail;
 
     // TAG variable for debugging
-    private static final String TAG = "LeaderFragment:";
+    private static final String TAG = "Leader Fragment: ";
 
     // variable to store the collection reference
     private CollectionReference colRefCustomer;
@@ -57,15 +58,15 @@ public class LeaderboardFragment extends Fragment{
     // variables for customer class
     private String pointsCategory = "Points";
 
+    // variables for the object references
     private TextView textView;
-
     private TableLayout tableLayout;
     private TextView tableRowNumber, tableRowUser, tableRowPoints;
     private TextView tableRowNumberHeading, tableRowUserHeading, tableRowPointsHeading;
     private TableRow tableRowHeading;
-
     private int tableRowIndex = 1;
 
+    // variable for date conversion
     private SimpleDateFormat simpleDateFormat;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -73,18 +74,20 @@ public class LeaderboardFragment extends Fragment{
 
         View root = inflater.inflate(R.layout.fragment_leaderboard, container, false);
 
+        // setting the object references
         textView = root.findViewById(R.id.text_leaderboard);
         tableLayout = root.findViewById(R.id.fragment_leaderboard_table_layout);
         tableLayout.setStretchAllColumns(true);
 
+        // Check if the user has already logged in, if true direct to customeractivity
         CheckCurrentUser();
 
         // Storing the path of collection(customers)/document(email of user)
         colRefCustomer = db.collection("customers");
 
+        // Checks the database at the start for information to be filled in the table
         CheckDatabaseOnce();
 
-        //textView.setText("leaderboard");
         return root;
     }
 
@@ -103,6 +106,7 @@ public class LeaderboardFragment extends Fragment{
         }
     }
 
+    // This function sets the table headings as row with index 0
     public void SetTableHeadings() {
         tableRowHeading = new TableRow(getActivity());
         tableRowNumberHeading = new TextView(getActivity());
@@ -138,6 +142,7 @@ public class LeaderboardFragment extends Fragment{
         tableLayout.addView(tableRowHeading, 0);
     }
 
+    // This function checks the data base for information and puts it in the table
     public void CheckDatabaseOnce() {
         colRefCustomer.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

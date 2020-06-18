@@ -1,9 +1,11 @@
 package com.example.academymanagement.models;
 
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
+
+// History class to make interaction with the firebase database easier
+// Stores the time,category,change,useremail
 
 public class History {
 

@@ -1,5 +1,8 @@
 package com.example.academymanagement.models;
 
+// Customer class to make interaction with the firebase database easier
+// Stores the price, name, details
+
 public class Rewards {
 
     private int price;

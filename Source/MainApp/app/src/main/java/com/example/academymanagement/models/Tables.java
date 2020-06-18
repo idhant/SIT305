@@ -1,5 +1,8 @@
 package com.example.academymanagement.models;
 
+// Customer class to make interaction with the firebase database easier
+// Stores the name, price and status of the table
+
 public class Tables {
 
     private String tablename;
@@ -25,8 +28,6 @@ public class Tables {
     public boolean getTablestatus(){
         return tablestatus;
     }
-
-
 
 //    public void setTableName(String tableName)
 //    {

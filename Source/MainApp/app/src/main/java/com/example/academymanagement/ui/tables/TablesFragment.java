@@ -41,7 +41,7 @@ public class TablesFragment extends Fragment {
     private String updateStatus;
 
     // TAG variable for debugging
-    private static final String TAG = "TablesFragment:";
+    private static final String TAG = "Tables Fragment: ";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

@@ -16,22 +16,40 @@ import com.example.academymanagement.R;
 
 public class ContactInformationFragment extends Fragment {
 
+    // private variables for the objects
+    private TextView textView;
+    private ImageButton phoneButton, emailButton, mapButton;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_contact_information, container, false);
-        final TextView textView = root.findViewById(R.id.text_contact_information);
+
+        // references to the objects
+        textView = root.findViewById(R.id.text_contact_information);
+        phoneButton = root.findViewById(R.id.fragment_contact_information_phone);
+        emailButton = root.findViewById(R.id.fragment_contact_information_email);
+        mapButton = root.findViewById(R.id.fragment_contact_information_map);
+
+        // setting the title
         textView.setText("Contact Us");
 
-        final ImageButton phoneButton = root.findViewById(R.id.fragment_contact_information_phone);
-        final ImageButton emailButton = root.findViewById(R.id.fragment_contact_information_email);
-        final ImageButton mapButton = root.findViewById(R.id.fragment_contact_information_map);
+        // On click button listeners
+        SetButtonListeners();
 
+        return root;
+    }
+
+    // Defines the listeners on the buttons
+    // If the phone button is clicked the phone app is opened with the number given so the user can call(Random number in this case)
+    // If the maps button is clicked, maps app is opened and user is directed to the location of the academy(Deakin in this case)
+    // If the email button is clicked, gmail app is opened and user can send an email
+    public void SetButtonListeners(){
         phoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                callIntent.setData(Uri.parse("tel:470287377"));
+                callIntent.setData(Uri.parse("tel:0111111111"));
                 startActivity(callIntent);
             }
         });
@@ -68,7 +86,5 @@ public class ContactInformationFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-        return root;
     }
 }

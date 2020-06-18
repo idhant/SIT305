@@ -1,8 +1,6 @@
 package com.example.academymanagement.ui.settings;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -18,10 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.example.academymanagement.LoginActivity;
 import com.example.academymanagement.R;
@@ -38,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SettingsFragment extends Fragment{
 
+    // variable for the customer class object
     private Customer customer;
 
     // Firestore database reference
@@ -46,11 +42,12 @@ public class SettingsFragment extends Fragment{
     private DocumentReference docRefCustomer, docRefHistory;
 
     // TAG variable for debugging
-    private static final String TAG="SettingsFragment:";
+    private static final String TAG="Settings Fragment: ";
 
     // variable to store the email of current logged-in user
     private String logEmail;
 
+    // variables to store the object references
     private TextView textView, textChoice;
     private EditText newUsername, newEmail, newPassword;
     private String username,email,password;
@@ -66,6 +63,7 @@ public class SettingsFragment extends Fragment{
 
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        // setting the object references
         textView = root.findViewById(R.id.text_settings);
         choiceSpinner = root.findViewById(R.id.fragment_settings_spinner);
         textChoice = root.findViewById(R.id.fragment_settings_select_spinner_option);
@@ -74,17 +72,41 @@ public class SettingsFragment extends Fragment{
         newPassword = root.findViewById(R.id.fragment_settings_new_password);
         selectionButton = root.findViewById(R.id.fragment_settings_button);
 
+        // Check if the user has already logged in, if true direct to customeractivity
         CheckCurrentUser();
 
         // Storing the path of collection(customers)/document(email of user)
         docRefCustomer = db.collection("customers").document(logEmail);
         docRefHistory = db.collection("history").document(logEmail);
 
+        // Define the spinner adapter and text
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
         choiceSpinner.setAdapter(adapter);
         textView.setText("Settings");
         textChoice.setText("Please select a option from dropdown and fill out the appropriate fields to update details.");
 
+        SetButtonListener();
+
+        return root;
+    }
+
+    // Checking the current logged in user
+    // If no user is logged-in redirects the user back to login page else continue
+    private void CheckCurrentUser(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            logEmail = user.getEmail();
+            Log.d(TAG, "Logged In Customer Email:" + logEmail);
+        }
+        else {
+            Log.d(TAG, "User hasn`t logged-in, redirecting to login activity.");
+            Toast.makeText(getActivity(), "User hasn`t logged-in, redirecting to login activity.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+        }
+    }
+
+    // Sets the button listener and communicates with the database
+    private void SetButtonListener(){
         selectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -239,21 +261,5 @@ public class SettingsFragment extends Fragment{
                 }
             }
         });
-        return root;
-    }
-
-    // Checking the current logged in user
-    // If no user is logged-in redirects the user back to login page else continue
-    private void CheckCurrentUser(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            logEmail = user.getEmail();
-            Log.d(TAG, "Logged In Customer Email:" + logEmail);
-        }
-        else {
-            Log.d(TAG, "User hasn`t logged-in, redirecting to login activity.");
-            Toast.makeText(getActivity(), "User hasn`t logged-in, redirecting to login activity.", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getActivity(), LoginActivity.class));
-        }
     }
 }

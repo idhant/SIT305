@@ -13,8 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.example.academymanagement.LoginActivity;
 import com.example.academymanagement.R;
@@ -27,25 +25,25 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
-import org.w3c.dom.Text;
-
 public class HomeFragment extends Fragment {
 
+    // variable for the customer class object
     private Customer customer;
 
     // Firestore database reference
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    // database reference to the current logged-in user details
     private DocumentReference docRefCustomer;
 
     // TAG variable for debugging
-    private static final String TAG="HomeFragment:";
+    private static final String TAG="Home Fragment: ";
 
     // variable to store the email of current logged-in user
     private String logEmail;
 
+    // variables for object references
     private TextView userName, userEmail, userCredits, userPoints, textView;
-
     private ImageView userPhoto;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -53,6 +51,7 @@ public class HomeFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // setting the object references
         textView = root.findViewById(R.id.text_home);
         userName = root.findViewById(R.id.fragment_home_name);
         userEmail = root.findViewById(R.id.fragment_home_email);
@@ -60,11 +59,13 @@ public class HomeFragment extends Fragment {
         userPoints = root.findViewById(R.id.fragment_home_points);
         userPhoto = root.findViewById(R.id.fragment_home_image);
 
+        // Check if the user has already logged in, if true direct to customeractivity
         CheckCurrentUser();
 
         // Storing the path of collection(customers)/document(email of user)
         docRefCustomer = db.collection("customers").document(logEmail);
 
+        // retrieving data whenever change is detected in any fields
         CheckDatabaseRealtime();
 
         return root;
