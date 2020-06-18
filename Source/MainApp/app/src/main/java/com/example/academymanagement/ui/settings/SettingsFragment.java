@@ -52,19 +52,13 @@ public class SettingsFragment extends Fragment{
     private String logEmail;
 
     private TextView textView, textChoice;
-
     private EditText newUsername, newEmail, newPassword;
-
+    private String username,email,password;
     private ImageView userPhoto;
-
     private Spinner choiceSpinner;
-
     private Button selectionButton;
-
     private String[] items = new String[]{"username", "password", "email"};
-
     private String selectedChoice;
-
     private boolean safeToUpdate;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -95,14 +89,13 @@ public class SettingsFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 selectedChoice = choiceSpinner.getSelectedItem().toString();
-                if(selectedChoice != null){
-                    if(selectedChoice == items[0])
-                    {
-                        if(newUsername != null){
-
+                if (selectedChoice != null) {
+                    if (selectedChoice == items[0]) {
+                        username = newUsername.getText().toString();
+                        if (!username.isEmpty()) {
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(newUsername.toString())
+                                    .setDisplayName(username)
                                     .build();
                             user.updateProfile(profileUpdates)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -112,9 +105,10 @@ public class SettingsFragment extends Fragment{
                                                 Log.d(TAG, "Username updated!");
                                                 Toast.makeText(getActivity(), "Username updated!", Toast.LENGTH_SHORT).show();
                                                 safeToUpdate = true;
-                                                Log.d(TAG,"Safe to update other references, firebase inside: " + safeToUpdate);
-                                            }
-                                            else{
+                                                Log.d(TAG, "Safe to update other username references, firebase inside: " + safeToUpdate);
+                                                newUsername.setText("");
+                                                newUsername.clearFocus();
+                                            } else {
                                                 Log.d(TAG, "Couldn`t update username!");
                                                 Toast.makeText(getActivity(), "Couldn`t update username!", Toast.LENGTH_SHORT).show();
                                                 safeToUpdate = false;
@@ -125,8 +119,91 @@ public class SettingsFragment extends Fragment{
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
+                                    if (safeToUpdate) {
+                                        docRefCustomer.update("username", username)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Log.d(TAG, "Customer username updated!");
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.d(TAG, "Couldn`t update Customer username!");
+                                                    }
+                                                });
+                                    } else {
+                                        Log.d(TAG, "Safe to update other references: " + safeToUpdate);
+                                    }
+                                }
+                            }, 5000);
+
+                        } else {
+                            newUsername.setError("Username field is empty!");
+                            newUsername.requestFocus();
+                            Log.d(TAG, "Username field is empty!");
+                            Toast.makeText(getActivity(), "Username field is empty!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    if (selectedChoice == items[1]) {
+                        password = newPassword.getText().toString();
+                        if (!password.isEmpty()) {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            user.updatePassword(password)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "User password updated!");
+                                                Toast.makeText(getActivity(), "User password updated!", Toast.LENGTH_SHORT).show();
+                                                Log.d(TAG, "Safe to update other username references, firebase inside: " + safeToUpdate);
+                                                newPassword.setText("");
+                                                newPassword.clearFocus();
+                                            } else {
+                                                Log.d(TAG, "Couldn`t update password!");
+                                                Toast.makeText(getActivity(), "Couldn`t update password!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                        } else {
+                            newPassword.setError("Password field is empty!");
+                            newPassword.requestFocus();
+                            Log.d(TAG, "Password field is empty!");
+                            Toast.makeText(getActivity(), "Password field is empty!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    /*
+                    if(selectedChoice == items[2]){
+                        email = newEmail.getText().toString();
+                        if(!email.isEmpty()){
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            user.updateEmail(email)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "User email address updated!");
+                                                Toast.makeText(getActivity(), "User email address updated!", Toast.LENGTH_SHORT).show();
+                                                safeToUpdate = true;
+                                                newEmail.setText("");
+                                                newEmail.clearFocus();
+                                            }
+                                            else{
+                                                Log.d(TAG, "Couldn`t update email!");
+                                                Toast.makeText(getActivity(), "Couldn`t update email!", Toast.LENGTH_SHORT).show();
+                                                safeToUpdate = false;
+                                            }
+                                        }
+                                    });
+
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
                                     if(safeToUpdate){
-                                        docRefCustomer.update("username", newUsername.getText().toString())
+                                        docRefCustomer.update("email", email)
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
@@ -141,22 +218,16 @@ public class SettingsFragment extends Fragment{
                                                 });
                                     }
                                     else{
-                                        Log.d(TAG,"Safe to update other references: " + safeToUpdate);
+                                        Log.d(TAG,"Safe to update customer email references: " + safeToUpdate);
                                     }
                                 }
                             }, 5000);
-
                         }
                         else{
-                            Log.d(TAG, "Username field is empty!");
-                            Toast.makeText(getActivity(), "Username field is empty!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    if(selectedChoice == items[1]){
-
-                    }
-                    if(selectedChoice == items[2]){
-
+                            newEmail.setError("Email field is empty!");
+                            newEmail.requestFocus();
+                            Log.d(TAG, "Email field is empty!");
+                            Toast.makeText(getActivity(), "Email field is empty!", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else{
@@ -164,8 +235,10 @@ public class SettingsFragment extends Fragment{
                     Toast.makeText(getActivity(), "No option selected!", Toast.LENGTH_SHORT).show();
                 }
             }
+            */
+                }
+            }
         });
-
         return root;
     }
 
