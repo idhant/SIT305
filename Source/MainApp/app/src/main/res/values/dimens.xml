@@ -6,8 +6,8 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="activity_home_welcome_heading">20sp</dimen>
-    <dimen name="activity_home_app_description">16sp</dimen>
-    <dimen name="activity_home_options_description">14sp</dimen>
+    <dimen name="activity_home_welcome_heading">24sp</dimen>
+    <dimen name="activity_home_app_description">18sp</dimen>
+    <dimen name="activity_home_options_description">16sp</dimen>
 
 </resources>

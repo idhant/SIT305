@@ -2,11 +2,8 @@ package com.example.academymanagement;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
@@ -15,13 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.academymanagement.models.Customer;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -38,10 +33,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import org.w3c.dom.Text;
-
-import java.util.logging.Logger;
-
 /*
 *Breakdown of different views:
 * content_main.xml = defines the space for fragment
@@ -53,13 +44,15 @@ import java.util.logging.Logger;
 * activity_main.xml = defines the space for the app_bar_main and the navigation_View
  */
 
-public class MainActivity extends AppCompatActivity {
+public class CustomerActivity extends AppCompatActivity {
 
     // Declaring a appbarconfig variable to add the options in the appbar
     private AppBarConfiguration mAppBarConfiguration;
 
+    // Firebase variables
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private Button logoutButton;
@@ -67,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private String logName;
     private String logEmail;
 
-    private static final String TAG="MainActivity";
+    private static final String TAG="CustomerActivity";
     Customer customer;
 
     private DocumentReference docRefCustomer;
@@ -84,6 +77,21 @@ public class MainActivity extends AppCompatActivity {
         // Create a reference to the toolbar in app_bar_main.xml which acts as a action bar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        firebaseAuth = FirebaseAuth.getInstance();
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                if( firebaseUser != null ){
+                    Toast.makeText(CustomerActivity.this,"You are logged in",Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(CustomerActivity.this, CustomerActivity.class);
+                    startActivity(i);
+                }
+                else{
+                    Toast.makeText(CustomerActivity.this,"Please Login",Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
 
         // When customer clicks this it should show a upwards animation fragment which lists any promotions.
         // Create a reference to the floatactionbutton in app_bar_main.xml
@@ -92,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                Intent intToMain = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intToMain = new Intent(CustomerActivity.this, LoginActivity.class);
                 startActivity(intToMain);
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -105,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                Intent intToMain = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intToMain = new Intent(CustomerActivity.this, LoginActivity.class);
                 startActivity(intToMain);
             }
         });
@@ -149,21 +157,6 @@ public class MainActivity extends AppCompatActivity {
         navUsername = headerView.findViewById(R.id.menu_username);
         navImage = headerView.findViewById(R.id.menu_photo);
 
-
-//        //TODO: Implement async function instead
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                if(customer != null) {
-//                    navName.setText(customer.getUsername());
-//                }
-//                navUsername.setText(logEmail);
-//                navImage.setImageResource(R.drawable.ic_menu_user_photo);
-//            }
-//        }, 3000);
-//
-
-
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -198,6 +191,11 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     // Checks the changes to the document real time and updates the credit fields
