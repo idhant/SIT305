@@ -44,4 +44,29 @@
     <string name="fragment_history_table_category">Category</string>
     <string name="fragment_history_table_change">Change</string>
 
+    <string name="title_activity_home">Home Activity</string>
+    <string name="activity_home_welcome_message">Welcome to my Business Management Application</string>
+    <string name="activity_home_app_description">
+        The basic idea for this app is to connect customers and owners in a Snooker Academy.
+        The customer downloads the app and registers himself. Whenever he plays a game on a certain
+        snooker table, normally he pays by cash or card. I introduced a pseudo-virtual currency that
+        the customer can purchase through many means(for the showcase of this app, its a simple addition
+        through a button). The customer also gets some reward points as incentive for buying credits
+        which he can redeem as more credits or physical rewards related to snooker. The customer can also
+        see the current price,status of different tables and can spend credits to play on them. In a
+        ideal circumstance the tables would be connected with some sort of IoT device to the database,
+        which can record the playing time, customers and other information. This information would be
+        shown to the customers and owner depending on access. The customer can see his transaction and playing
+        history as well. Settings tab allow changing personal details and contact information such as
+        callin, email and map navigation is also implemented.
+    </string>
+    <string name="activity_home_interaction_options">To view the customer functionality,
+        either register with new details or login using the following sample credentials: \n
+        Email: "testuser@email.com" \n
+        Password: "test123"
+    </string>
+    <string name="activity_home_customer_login_button">LOGIN</string>
+    <string name="activity_home_customer_register_button">REGISTER</string>
+
+
 </resources>
