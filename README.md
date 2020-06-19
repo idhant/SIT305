@@ -15,5 +15,3 @@ There are different files and folders which have their uses as follows:
     - data/ = contains any raw data needed for the application.
 
     - images/ = contains the images used.
-
-    - sounds/ = contaions the sounds used.
